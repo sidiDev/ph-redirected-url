@@ -58,7 +58,7 @@ app.get("/", async (req, res) => {
     res.send(finalUrl.replace("/?ref=producthunt", ""));
   } catch (error) {
     console.error("Puppeteer failed:", error);
-    res.status(500).send("Failed to fetch page");
+    res.status(500).send({ message: "Failed to fetch page", error });
   } finally {
     if (browser) {
       await browser.close();
