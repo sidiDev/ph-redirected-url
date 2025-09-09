@@ -18,52 +18,53 @@ app.use(
 app.get("/", async (req, res) => {
   const { url } = req.query;
   console.log(url);
+  res.send(url);
 
-  let browser;
-  try {
-    browser = await puppeteer.launch({
-      headless: "new",
-      args: [
-        "--disable-blink-features=AutomationControlled",
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--lang=en-US,en;q=0.9",
-        "--window-size=1366,768",
-      ],
-      defaultViewport: { width: 1366, height: 768 },
-    });
+  // let browser;
+  // try {
+  //   browser = await puppeteer.launch({
+  //     headless: "new",
+  //     args: [
+  //       "--disable-blink-features=AutomationControlled",
+  //       "--no-sandbox",
+  //       "--disable-setuid-sandbox",
+  //       "--lang=en-US,en;q=0.9",
+  //       "--window-size=1366,768",
+  //     ],
+  //     defaultViewport: { width: 1366, height: 768 },
+  //   });
 
-    const page = await browser.newPage();
+  //   const page = await browser.newPage();
 
-    await page.setUserAgent(
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-    );
-    await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(navigator, "platform", { get: () => "MacIntel" });
-    });
+  //   await page.setUserAgent(
+  //     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+  //   );
+  //   await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+  //   await page.evaluateOnNewDocument(() => {
+  //     Object.defineProperty(navigator, "platform", { get: () => "MacIntel" });
+  //   });
 
-    // Navigate the page to a URL and wait for the network to be mostly idle
-    const response = await page.goto(url, {
-      waitUntil: "networkidle2",
-      timeout: 60000,
-    });
+  //   // Navigate the page to a URL and wait for the network to be mostly idle
+  //   const response = await page.goto(url, {
+  //     waitUntil: "networkidle2",
+  //     timeout: 60000,
+  //   });
 
-    // Optional: small human-like pause
-    await delay(1500);
+  //   // Optional: small human-like pause
+  //   await delay(1500);
 
-    const finalUrl = (response && response.url()) || page.url();
-    console.log("Final URL:", finalUrl);
+  //   const finalUrl = (response && response.url()) || page.url();
+  //   console.log("Final URL:", finalUrl);
 
-    res.send(finalUrl.replace("/?ref=producthunt", ""));
-  } catch (error) {
-    console.error("Puppeteer failed:", error);
-    res.status(500).send("Failed to fetch page");
-  } finally {
-    if (browser) {
-      await browser.close();
-    }
-  }
+  //   res.send(finalUrl.replace("/?ref=producthunt", ""));
+  // } catch (error) {
+  //   console.error("Puppeteer failed:", error);
+  //   res.status(500).send("Failed to fetch page");
+  // } finally {
+  //   if (browser) {
+  //     await browser.close();
+  //   }
+  // }
 });
 
 app.listen(port, () => {
